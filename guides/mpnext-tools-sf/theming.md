@@ -47,7 +47,7 @@ In MP, under **System Setup → Configuration Settings**, add (or edit):
 
 | Application Code | Key Name | Value |
 |---|---|---|
-| *your code, e.g.* `CP_NEXT` | `Project_CSS` | `archomaha` |
+| *your code*<br>Default: `CP_NEXT` | `Project_CSS` | `archomaha` |
 
 Two kinds of value are accepted:
 

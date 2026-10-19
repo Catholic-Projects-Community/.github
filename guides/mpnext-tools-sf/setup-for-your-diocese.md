@@ -20,18 +20,19 @@ hosting settings, never in the code. One copy of the code can serve many diocese
 
 The tools read `dp_Configuration_Settings` (MP: **System Setup → Configuration Settings**).
 
-1. **`COMMON` / `MPNext_Catholic_Projects`**: the single entry point. Its **Value** is an
-   Application Code that you choose for your organization's settings, for example
-   `CP_NEXT`. Pick any code made of letters, digits or underscores.
-2. **Your Application Code**: every other MPNext setting is a row under the code you chose.
+1. **Your Application Code**: every MPNext setting is a row under one Application Code.
+   **The default is `CP_NEXT`**, so most organizations simply add their settings under
+   `CP_NEXT` and need nothing else.
+2. **`COMMON` / `MPNext_Catholic_Projects`** (optional): to use a different code, add this row
+   with its **Value** set to the code you want, made of letters, digits or underscores.
 3. **`COMMON` / `MPCloudUrlPrefix`**: set by MP itself (e.g. `archomaha`). The tools show it
    as the database name so you can always see which MP you are working in. You don't add it.
 
 > **The fork owner's databases.** The MPNext-Tools-SF code belongs to SFCatholic (Diocese of
 > Sioux Falls). Their databases (`sfcatholic`, `sfcatholicsandbox`) keep the tools' built-in
-> behavior when they have no `MPNext_Catholic_Projects` row. **Every other database must add
-> that row**; until it does, features that depend on settings explain what to add and stay
-> off. The owner can opt in to these same rules at any time by adding the row.
+> behavior when they have no `MPNext_Catholic_Projects` row. **Every other database reads its
+> settings from `CP_NEXT`** unless that row names another code. The owner can opt in to these
+> same rules at any time by adding the row.
 
 ---
 
@@ -42,18 +43,18 @@ Role IDs usually match between a production database and its sandbox copy, but c
 
 | Application_Code | Key_Name | Value | Required? |
 |---|---|---|---|
-| `COMMON` | `MPNext_Catholic_Projects` | Your Application Code, e.g. `CP_NEXT` | **Yes** |
-| *your code* | `Tool_Deploy_Enabled` | `true` to allow deploying tools into this database | Only to deploy tools (Step 5) |
-| *your code* | `Tool_Name_Prefix` | Two letters or digits, e.g. `AO` | No: preselects the name prefix when deploying tools |
-| *your code* | `Sec_Role_Local_Dev` | The `Role_ID` of your developers' security role | No: preselected role for newly deployed tools |
-| *your code* | `Pastorates_Enabled` | `true` only if your database has the Pastorates customization | No: off unless `true` (see below) |
-| *your code* | `Diocese_Congregation_ID` | The Congregation_ID of your diocese's own organization record | No: defaults to `1` |
-| *your code* | `Directory_Excluded_Congregation_IDs` | Comma-separated Congregation_IDs to leave out of the Diocese Directory, e.g. `2` | No |
-| *your code* | `Directory_Name` | The directory's title, e.g. `Archdiocesan Directory` | No: defaults to `Diocese Directory` |
-| *your code* | `Chancery_Name` | What your diocese calls its central offices, e.g. `Pastoral Center` | No: defaults to `Chancery` |
-| *your code* | `Directory_Hidden_Tabs` | Comma-separated tabs to hide (see below) | No |
-| *your code* | `Project_CSS` | A theme name kept in the app (e.g. `archomaha`) or an `https://` stylesheet address | No: see [theming.md](theming.md) |
-| *your code* | `Directory_Logo_Url` | An `https://` address of your seal or logo (PNG or JPEG) | No: see **Seal or logo** below |
+| `COMMON` | `MPNext_Catholic_Projects` | Your Application Code, if not `CP_NEXT` | No: defaults to `CP_NEXT` |
+| *your code*<br>Default: `CP_NEXT` | `Tool_Deploy_Enabled` | `true` to allow deploying tools into this database | Only to deploy tools (Step 5) |
+| *your code*<br>Default: `CP_NEXT` | `Tool_Name_Prefix` | Two letters or digits, e.g. `AO` | No: preselects the name prefix when deploying tools |
+| *your code*<br>Default: `CP_NEXT` | `Sec_Role_Local_Dev` | The `Role_ID` of your developers' security role | No: preselected role for newly deployed tools |
+| *your code*<br>Default: `CP_NEXT` | `Pastorates_Enabled` | `true` only if your database has the Pastorates customization | No: off unless `true` (see below) |
+| *your code*<br>Default: `CP_NEXT` | `Diocese_Congregation_ID` | The Congregation_ID of your diocese's own organization record | No: defaults to `1` |
+| *your code*<br>Default: `CP_NEXT` | `Directory_Excluded_Congregation_IDs` | Comma-separated Congregation_IDs to leave out of the Diocese Directory, e.g. `2` | No |
+| *your code*<br>Default: `CP_NEXT` | `Directory_Name` | The directory's title, e.g. `Archdiocesan Directory` | No: defaults to `Diocese Directory` |
+| *your code*<br>Default: `CP_NEXT` | `Chancery_Name` | What your diocese calls its central offices, e.g. `Pastoral Center` | No: defaults to `Chancery` |
+| *your code*<br>Default: `CP_NEXT` | `Directory_Hidden_Tabs` | Comma-separated tabs to hide (see below) | No |
+| *your code*<br>Default: `CP_NEXT` | `Project_CSS` | A theme name kept in the app (e.g. `archomaha`) or an `https://` stylesheet address | No: see [theming.md](theming.md) |
+| *your code*<br>Default: `CP_NEXT` | `Directory_Logo_Url` | An `https://` address of your seal or logo (PNG or JPEG) | No: see **Seal or logo** below |
 
 **You don't need a setting for Administrators.** MP identifies the Administrators security
 role by its name, and every deployed tool is always granted to it.
@@ -164,7 +165,7 @@ contact your MP Administrator.
 
 1. Open **System Setup → Configuration Settings**.
 2. Add (or edit) the row:
-   - **Application Code**: your organization's code, the Value of `COMMON` / `MPNext_Catholic_Projects` (e.g. `CP_NEXT`)
+   - **Application Code**: `CP_NEXT`, or the Value of `COMMON` / `MPNext_Catholic_Projects` if you set one
    - **Key Name**: `Tool_Deploy_Enabled`
    - **Value**: `true`
 3. Save. The change applies the next time the Tool Deployment page is loaded; no restart or
@@ -205,7 +206,7 @@ Afterwards, adjust who can use each tool on **Tool Roles** (`/admin/tool-roles`)
 
 | You see | What to do |
 |---|---|
-| "This database is not set up for MPNext tools yet" | Add `COMMON` / `MPNext_Catholic_Projects` (Step 1). |
+| "This database is not set up for MPNext tools yet" | The `COMMON` / `MPNext_Catholic_Projects` Value isn't a valid code (letters, digits or underscores), or MP's `COMMON` / `MPCloudUrlPrefix` couldn't be read. Fix the row, or add it naming your code (Step 1). |
 | "Tool deployment is not enabled for this database" | Ask your MP Administrator to set `Tool_Deploy_Enabled` to `true` (Step 5). |
 | "Some optional settings need attention" | A `Tool_Name_Prefix` or `Sec_Role_Local_Dev` value is invalid or names a missing role. You can still deploy. |
 | "Provided redirect URI is not registered for the client" when signing in | Add this site's callback address to the main API client (Step 3). |
